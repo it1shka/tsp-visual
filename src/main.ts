@@ -1,19 +1,20 @@
 import Canvas from './canvas'
-import { randpos } from './utils'
 import Vertex from './vertex'
 
 function resizeCanvas() {
   Canvas.element.width = window.innerWidth
   Canvas.element.height = window.innerHeight
 }
-
 window.onresize = resizeCanvas
 resizeCanvas()
 
-for (let i = 0; i < 50; i++) {
-  const position = randpos()
-  new Vertex(position)
+const vertices = new Array<Vertex>()
+
+function addNewVertex({ clientX, clientY }: MouseEvent) {
+  const vertex = new Vertex([clientX, clientY])
+  vertices.push(vertex)
 }
+Canvas.element.onclick = addNewVertex
 
 setInterval(() => {
   Canvas.clear()

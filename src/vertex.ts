@@ -12,8 +12,9 @@ export default class Vertex {
   set position(value) {
     this._position = value
     const [x, y] = value
-    this.element.style.top = `${y}px`
-    this.element.style.left = `${x}px`
+    const { clientWidth, clientHeight } = this.element
+    this.element.style.top = `${y - clientHeight / 2}px`
+    this.element.style.left = `${x - clientWidth / 2}px`
   }
 
   constructor (startPosition: Position) {
