@@ -1,15 +1,21 @@
-class Person {
-  constructor (
-    readonly name: string,
-    readonly surname: string,
-    readonly age: number
-  ) {}
+import Canvas from './canvas'
+import { randpos } from './utils'
+import Vertex from './vertex'
 
-  get greeting() {
-    return `Hi! I am ${this.name} ${this.surname}`
-  }
+function resizeCanvas() {
+  Canvas.element.width = window.innerWidth
+  Canvas.element.height = window.innerHeight
 }
 
-const me = new Person('Tikhon', 'Belousov', 18)
-const greeting = me.greeting
-console.log(greeting)
+window.onresize = resizeCanvas
+resizeCanvas()
+
+for (let i = 0; i < 50; i++) {
+  const position = randpos()
+  new Vertex(position)
+}
+
+setInterval(() => {
+  Canvas.clear()
+  Canvas.drawGrid()
+}, 60)

@@ -1,0 +1,25 @@
+$size: 40px;
+.vertex {
+  position: fixed;
+  cursor: pointer;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  transition: 0.1s transform ease-in-out;
+  &:hover {
+    transform: scale(1.1);
+  }
+
+  div {
+    width: $size;
+    height: $size;
+    border: 3px solid black;
+    border-radius: 100%;  
+  }
+
+  p {
+    margin-top: 5px;
+  }
+}
