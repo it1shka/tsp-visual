@@ -36,6 +36,12 @@ export function removeElement<T>(array: T[], element: T) {
   return true
 }
 
+export function sleep(time: number) {
+  return new Promise<void>(resolve => {
+    setTimeout(resolve, time)
+  })
+}
+
 export const RandomNameGenerator = new class {
   private readonly prefixChance = 30
   private readonly prefixes = [ 'New', 'Old', 'North', 'South', 'West', 'East', 'Royal', 'Saint' ]
@@ -66,5 +72,40 @@ export const RandomColorGenerator = new class {
 
   getColor() {
     return choice(this.colors)
+  }
+}()
+
+export const Keyboard = new class {
+  readonly listeners = new Map<string, Array<() => any>>()
+
+  constructor () {
+    window.addEventListener('keydown', this.onKeyClick)
+  }
+
+  private onKeyClick = (event: KeyboardEvent) => {
+    const bucket = this.getBucket(event.key)
+    if (bucket.length > 0) event.preventDefault() 
+    bucket.forEach(action => action())
+  }
+  
+  private getBucket(key: string) {
+    const maybeBucket = this.listeners.get(key)
+    if (maybeBucket === undefined) {
+      const bucket: Array<() => any> = []
+      this.listeners.set(key, bucket)
+      return bucket
+    }
+    return maybeBucket
+  }
+
+  addEventListener(key: string, action: () => any) {
+    const bucket = this.getBucket(key)
+    bucket.push(action)
+    return action
+  }
+
+  removeEventListener(key: string, action: () => any) {
+    const bucket = this.getBucket(key)
+    return removeElement(bucket, action)
   }
 }()
