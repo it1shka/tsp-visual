@@ -1,0 +1,16 @@
+{
+  "name": "tsp-visual",
+  "description": "Website for TSP simulation",
+  "source": "index.html",
+  "browserlist": "> 0.5%, last 2 versions, not dead",
+  "scripts": {
+    "dev": "parcel",
+    "build": "parcel build"
+  },
+  "author": "it1shka",
+  "license": "MIT",
+  "devDependencies": {
+    "@parcel/transformer-sass": "^2.8.3",
+    "parcel": "^2.8.3"
+  }
+}
