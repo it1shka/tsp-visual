@@ -29,6 +29,13 @@ export function maybe<T>(probability: number, action: () => T) {
   return null
 }
 
+export function removeElement<T>(array: T[], element: T) {
+  const index = array.indexOf(element)
+  if (index === -1) return false
+  array.splice(index, 1)
+  return true
+}
+
 export const RandomNameGenerator = new class {
   private readonly prefixChance = 30
   private readonly prefixes = [ 'New', 'Old', 'North', 'South', 'West', 'East', 'Royal', 'Saint' ]
