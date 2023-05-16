@@ -11,6 +11,7 @@ export default new class Main {
     this.makeCanvasResizable()
     this.enableVertexAddition()
     this.bindMenu()
+    this.bindAlgorithmPanel()
     this.startCanvasLoop()
   }
 
@@ -66,6 +67,17 @@ export default new class Main {
       throw new Error('Failed to bind toggle button')
     }
     (toggleButton as HTMLElement).onclick = Actions.toggleMenuAction
+  }
+
+  private bindAlgorithmPanel() {
+    const panel = document.querySelector('.algorithm-panel')
+    if (panel === null) {
+      throw new Error('Failed to bind algorithm panel')
+    }
+    const algorithmElements = panel.querySelectorAll('li')
+    algorithmElements.forEach(elem => {
+      // todo...
+    })
   }
 
   private startCanvasLoop() {

@@ -27,6 +27,26 @@
       <li action="toggleMenuAction"      key=" ">Close Menu</li>
     </ul>
   </aside>
+
+  <ul class="algorithm-panel closed">
+    <li class="algorithm-panel__option">
+      <h2>Nearest Neighbor</h2>
+      <p>
+        Starts at one city and connects with the closest unvisited city. 
+        It repeats until every city has been visited. 
+        It then returns to the starting city.
+      </p>
+    </li>
+
+    <li class="algorithm-panel__option">
+      <h2>Shortest Edge Insertion</h2>
+      <p>
+        Inserts shortest edge possible.
+        This is repeated until we have a cycle containing all of the cities.
+      </p>
+    </li>
+  </ul>
+
   <canvas class="canvas"></canvas>
   <script defer type="module" src="src/main.ts"></script>
 </body>

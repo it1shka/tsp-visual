@@ -15,14 +15,12 @@ export function randomizeAction() {
   const count = Number(input)
   if (Number.isNaN(count) || count <= 0) return 
   Main.randomizeMap(count)
-  toggleMenuAction()
 }
 
 export function clearAction() {
   const confirm = window.confirm('Clear the map?')
   if (!confirm)  return
   Main.clear() 
-  toggleMenuAction()
 }
 
 export function removeLastAction() {
@@ -33,6 +31,12 @@ export function runAlgorithmAction() {
 
 }
 
-export function chooseAlgorithmAction() {
-
-}
+export const chooseAlgorithmAction = (() => {
+  const panel = document.querySelector('.algorithm-panel')
+  if (panel === null) {
+    throw new Error('Failed to get algorithm panel')
+  }
+  return () => {
+    panel.classList.toggle('closed')
+  }
+})()

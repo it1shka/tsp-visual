@@ -1,0 +1,45 @@
+.algorithm-panel {
+
+  transition: 0.25s transform ease-in-out;
+  &.closed {
+    transform: translateY(100%);
+  }
+
+  overflow: visible;
+  position: fixed;
+  z-index: 20;
+  left: 0; right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  & > * + * {
+    margin-left: 0.5em;
+  }
+
+  .algorithm-panel__option {
+    margin: 1em;
+    padding: 1em;
+    max-width: 250px;
+    color: white;
+    border-radius: 15px;
+    background: rgb(238,174,202);
+    background: linear-gradient(56deg, rgba(238,174,202,1) 0%, rgba(148,187,233,1) 100%); 
+    cursor: pointer;
+    user-select: none;
+
+    transition: 0.1s ease-in-out transform;
+    &:hover, &.active {
+      transform: translateY(-5px) scale(1.05);
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 0.5em;
+    }
+
+    p {
+      font-size: 0.75em;
+    }
+  }
+}
