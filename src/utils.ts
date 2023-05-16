@@ -109,3 +109,17 @@ export const Keyboard = new class {
     return removeElement(bucket, action)
   }
 }()
+
+export function trackableArray<T>(source: T[]) {
+  const tracker = new Array<T[]>()
+  const proxy = new Proxy(source, {
+    set(target, property, value, receiver) {
+      const result = Reflect.set(target, property, value, receiver)
+      if (property === 'length') {
+        tracker.push([ ...target ])
+      }
+      return result
+    }
+  })
+  return [proxy, tracker] as const
+}

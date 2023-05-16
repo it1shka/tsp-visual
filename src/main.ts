@@ -1,11 +1,15 @@
 import * as Actions from './actions'
+import * as Algorithms from './algorithms'
 import Canvas from './canvas'
-import { Keyboard, randpos, removeElement, sleep } from './utils'
+import { Edge, Keyboard, randpos, removeElement, sleep, trackableArray } from './utils'
 import Vertex from './vertex'
 
 export default new class Main {
   private readonly vertices = new Array<Vertex>()
   private busy = false
+
+  private history = new Array<Edge[]>()
+  private historyPointer = -1
 
   constructor() {
     this.makeCanvasResizable()
@@ -76,7 +80,20 @@ export default new class Main {
     }
     const algorithmElements = panel.querySelectorAll('li')
     algorithmElements.forEach(elem => {
-      // todo...
+      const algorithmAttr = elem.getAttribute('algorithm')
+      if (algorithmAttr === null) return
+      if (!(algorithmAttr in Algorithms)) return
+      type AlgorithmName = keyof typeof Algorithms
+      const algorithm = Algorithms[algorithmAttr as unknown as AlgorithmName]
+
+      elem.onclick = () => {
+        if (this.busy) return
+        const [edges, history] = trackableArray<Edge>([])
+        const positions = this.vertices.map(vertex => vertex.position)
+        algorithm(positions, edges)
+        this.history = history
+        this.historyPointer = -1
+      }
     })
   }
 
@@ -84,6 +101,10 @@ export default new class Main {
     setInterval(() => {
       Canvas.clear()
       Canvas.drawGrid()
+
+      const state = this.history[this.historyPointer]
+      if (!state) return
+      state.forEach(edge => Canvas.drawEdge(edge))
     }, 60)
   }
 
@@ -126,8 +147,30 @@ export default new class Main {
   }
 
   removeLast = () => {
+    if (this.busy) return
     const last = this.vertices.pop()
     if (last === undefined) return
     this.removeVertex(last)
+  }
+
+  private readonly runDelay = 100
+  runAlgorithm = async () => {
+    if (this.busy) return
+    this.busy = true
+    while (this.historyPointer < this.history.length - 1) {
+      this.historyPointer++
+      await sleep(this.runDelay)
+    }
+    this.busy = false
+  }
+
+  nextStep = () => {
+    if (this.historyPointer >= this.history.length) return
+    this.historyPointer++
+  }
+
+  prevStep = () => {
+    if (this.historyPointer < -1) return
+    this.historyPointer--
   }
 }()
