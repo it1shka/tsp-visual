@@ -1,15 +1,16 @@
 import * as Actions from './actions'
 import * as Algorithms from './algorithms'
 import Canvas from './canvas'
-import { Edge, Keyboard, randpos, removeElement, sleep, trackableArray } from './utils'
+import { Position, Edge, Keyboard, randpos, removeElement, sleep, trackableArray } from './utils'
 import Vertex from './vertex'
+
+type Algorithm = (vertices: Position[], edges: Edge[]) => void
 
 export default new class Main {
   private readonly vertices = new Array<Vertex>()
   private busy = false
-
-  private history = new Array<Edge[]>()
-  private historyPointer = -1
+  private algorithm: Algorithm | null = null
+  private edges: Edge[] | null = null
 
   constructor() {
     this.makeCanvasResizable()
@@ -85,14 +86,22 @@ export default new class Main {
       if (!(algorithmAttr in Algorithms)) return
       type AlgorithmName = keyof typeof Algorithms
       const algorithm = Algorithms[algorithmAttr as unknown as AlgorithmName]
+      if (algorithm === this.algorithm) {
+        elem.classList.add('active')
+      }
 
       elem.onclick = () => {
         if (this.busy) return
-        const [edges, history] = trackableArray<Edge>([])
-        const positions = this.vertices.map(vertex => vertex.position)
-        algorithm(positions, edges)
-        this.history = history
-        this.historyPointer = -1
+        algorithmElements.forEach(elem => elem.classList.remove('active'))
+        this.edges = null
+
+        if (algorithm === this.algorithm) {
+          this.algorithm = null
+          elem.classList.remove('active')
+          return
+        }
+        this.algorithm = algorithm
+        elem.classList.add('active')
       }
     })
   }
@@ -101,10 +110,8 @@ export default new class Main {
     setInterval(() => {
       Canvas.clear()
       Canvas.drawGrid()
-
-      const state = this.history[this.historyPointer]
-      if (!state) return
-      state.forEach(edge => Canvas.drawEdge(edge))
+      if (!this.edges) return
+      this.edges.forEach(edge => Canvas.drawEdge(edge))
     }, 60)
   }
 
@@ -155,22 +162,15 @@ export default new class Main {
 
   private readonly runDelay = 100
   runAlgorithm = async () => {
-    if (this.busy) return
+    if (this.busy || !this.algorithm || this.vertices.length < 2) return
     this.busy = true
-    while (this.historyPointer < this.history.length - 1) {
-      this.historyPointer++
+    const vertices = this.vertices.map(vertex => vertex.position)
+    const [edges, history] = trackableArray<Edge>([])
+    this.algorithm(vertices, edges)
+    for (const record of history) {
+      this.edges = record
       await sleep(this.runDelay)
     }
     this.busy = false
-  }
-
-  nextStep = () => {
-    if (this.historyPointer >= this.history.length) return
-    this.historyPointer++
-  }
-
-  prevStep = () => {
-    if (this.historyPointer < -1) return
-    this.historyPointer--
   }
 }()

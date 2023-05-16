@@ -1,6 +1,7 @@
 .action-menu {
   overflow: visible;
   transition: 0.25s transform ease-in-out;
+  user-select: none;
   &.closed {
     transform: translateX(-100%);
   }

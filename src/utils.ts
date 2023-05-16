@@ -123,3 +123,7 @@ export function trackableArray<T>(source: T[]) {
   })
   return [proxy, tracker] as const
 }
+
+export function dist([x1, y1]: Position, [x2, y2]: Position) {
+  return Math.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2)
+}

@@ -16,7 +16,7 @@ const closeMenuAction = (() => {
     throw new Error('Failed to find menu')
   }
   return () => {
-    menu.classList.remove('closed')
+    menu.classList.add('closed')
   }
 })()
 
@@ -53,11 +53,3 @@ export const chooseAlgorithmAction = (() => {
     panel.classList.toggle('closed')
   }
 })()
-
-export function nextStepAction() {
-  Main.nextStep()
-}
-
-export function prevStepAction() {
-  Main.prevStep()
-}
