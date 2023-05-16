@@ -5,14 +5,17 @@ import Vertex from './vertex'
 
 export default new class Main {
   private readonly vertices = new Array<Vertex>()
+  private busy = false
 
   constructor() {
     this.makeCanvasResizable()
     this.enableVertexAddition()
     this.enableKeyBindings()
+    this.bindMenu()
     this.startCanvasLoop()
   }
 
+  // init functions
   private makeCanvasResizable() {
     function resizeCanvas() {
       Canvas.element.width = window.innerWidth
@@ -33,8 +36,38 @@ export default new class Main {
     Keyboard.addEventListener('p', Actions.randomizeAction)
     Keyboard.addEventListener('c', Actions.clearAction)
     Keyboard.addEventListener('z', Actions.removeLastAction)
+    Keyboard.addEventListener(' ', Actions.toggleMenuAction)
   }
 
+  private bindMenu() {
+    const menu = document.querySelector('.action-menu')
+    if (menu === null) {
+      throw new Error('Failed to bind menu')
+    }
+    const buttons = menu.querySelectorAll('li')
+    buttons.forEach(button => {
+      const action = button.getAttribute('action')
+      if (action === null) return
+      if (action in Actions) {
+        type ActionType = keyof typeof Actions
+        button.onclick = Actions[action as unknown as ActionType]
+      }
+    })
+    const toggleButton = document.querySelector('.action-menu-open-button')
+    if (toggleButton === null) {
+      throw new Error('Failed to bind toggle button')
+    }
+    (toggleButton as HTMLElement).onclick = Actions.toggleMenuAction
+  }
+
+  private startCanvasLoop() {
+    setInterval(() => {
+      Canvas.clear()
+      Canvas.drawGrid()
+    }, 60)
+  }
+
+  // private methods
   private addVertex(vertex: Vertex) {
     this.vertices.push(vertex)
     vertex.element.ondblclick = () => {
@@ -47,30 +80,29 @@ export default new class Main {
     removeElement(this.vertices, vertex)
   }
 
-  private startCanvasLoop() {
-    setInterval(() => {
-      Canvas.clear()
-      Canvas.drawGrid()
-    }, 60)
-  }
-
   // actions
   private readonly randomizeDelay = 25
   randomizeMap = async (count: number) => {
+    if (this.busy) return
+    this.busy = true
     for (let i = 0; i < count; i++) {
       const position = randpos()
       const vertex = new Vertex(position)
       this.addVertex(vertex)
       await sleep(this.randomizeDelay)
     }
+    this.busy = false
   }
 
   private readonly clearDelay = 25
   clear = async () => {
+    if (this.busy) return
+    this.busy = true
     for (const each of [ ...this.vertices ]) {
       this.removeVertex(each)
       await sleep(this.clearDelay)
     }
+    this.busy = false
   }
 
   removeLast = () => {

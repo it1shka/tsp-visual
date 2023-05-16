@@ -1,0 +1,64 @@
+.action-menu {
+  transition: 0.25s transform ease-in-out;
+  &.closed {
+    transform: translateX(-100%);
+  }
+
+  position: fixed;
+  top: 0; bottom: 0; left: 0; right: 0;
+  z-index: 10;
+  background-color: #000000d7;
+
+  display: grid;
+  place-items: center;
+
+  .action-menu__list {
+    overflow: visible;
+    display: flex;
+    flex-direction: column;
+    & > * + * {
+      margin-top: 0.5em;
+    }
+  }
+}
+
+$hover-radius: 15px;
+.action-menu__list > li {
+  display: block;
+  font-size: 1.5em;
+  color: white;
+  cursor: pointer;
+  border: 2px solid white;
+  padding: 0.5em 1em;
+
+  transition: 0.1s all ease-in-out;
+  &:hover {
+    color: black;
+    background-color: white;
+    border-radius: $hover-radius 0px $hover-radius 0px;
+    transform: translateX(20px) scale(1.05);
+  }
+}
+
+$radius: 15px;
+$color: #1954b3;
+.action-menu-open-button {
+  position: fixed;
+  left: 0;
+  top: 50vh;
+  transform: translateY(-50%);
+  border: none;
+  font-size: 1.5em;
+  padding: 0.5em 0.25em;
+  border-radius: 0px $radius $radius 0px;
+  background-color: $color;
+  color: white;
+  line-height: 0.85em;
+  cursor: pointer;
+
+  transition: 0.25s all ease;
+  &:hover {
+    background-color: darken($color, 25%);
+    transform: translateY(-50%) scale(1.05);
+  }
+}

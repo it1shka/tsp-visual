@@ -8,6 +8,21 @@
   <title>Travelling Salesman Problem</title>
 </head>
 <body>
+  <button class="action-menu-open-button">
+    M <br>
+    e <br>
+    n <br>
+    u <br>
+  </button>
+  <aside class="action-menu closed">
+    <ul class="action-menu__list">
+      <li>Choose Algorithm</li>
+      <li action="randomizeAction">Randomize Map</li>
+      <li action="clearAction">Clear Map</li>
+      <li action="removeLastAction">Remove Last Vertex</li>
+      <li action="toggleMenuAction">Close Menu</li>
+    </ul>
+  </aside>
   <canvas class="canvas"></canvas>
   <script defer type="module" src="src/main.ts"></script>
 </body>
