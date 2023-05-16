@@ -8,7 +8,7 @@
   position: fixed;
   top: 0; bottom: 0; left: 0; right: 0;
   z-index: 10;
-  background-color: #000000d7;
+  background-color: #000000af;
 
   display: grid;
   place-items: center;
@@ -25,6 +25,7 @@
 
 $hover-radius: 15px;
 .action-menu__list > li {
+  background-color: #0000006b;
   display: block;
   font-size: 1.5em;
   color: white;
@@ -61,4 +62,15 @@ $color: #1954b3;
     background-color: darken($color, 25%);
     transform: translateY(-50%) scale(1.05);
   }
+}
+
+.action-menu__shortcut-preview {
+  transition: 0.1s color ease;
+  &.hidden {
+    color: transparent;
+  }
+
+  position: absolute;
+  top: 2em;
+  color: white;
 }

@@ -36,6 +36,10 @@ export default new class Main {
     if (menu === null) {
       throw new Error('Failed to bind menu')
     }
+    const shortcutPreview = document.querySelector('.action-menu__shortcut-preview')
+    if (shortcutPreview === null) {
+      throw new Error('Failed to get shortcut preview')
+    }
     const buttons = menu.querySelectorAll('li')
     buttons.forEach(button => {
       const action = button.getAttribute('action')
@@ -47,6 +51,13 @@ export default new class Main {
         const keybinding = button.getAttribute('key')
         if (keybinding !== null) {
           Keyboard.addEventListener(keybinding, actionFunction)
+          button.onmouseenter = () => {
+            shortcutPreview.textContent = `Uses [${keybinding === ' ' ? 'Space' : keybinding}] as keybinding`
+            shortcutPreview.classList.remove('hidden')
+          }
+          button.onmouseleave = () => {
+            shortcutPreview.classList.add('hidden')
+          }
         }
       }
     })

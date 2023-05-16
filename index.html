@@ -9,20 +9,22 @@
 </head>
 <body>
   <aside class="action-menu closed">
+    <p class="action-menu__shortcut-preview hidden"></p>
+
     <button class="action-menu-open-button">
       M <br>
       e <br>
       n <br>
       u <br>
     </button>
-    
+
     <ul class="action-menu__list">
-      <li>Run Algorithm</li>
-      <li>Choose Algorithm</li>
-      <li action="randomizeAction"  key="p">Randomize Map</li>
-      <li action="clearAction"      key="c">Clear Map</li>
-      <li action="removeLastAction" key="z">Remove Last Vertex</li>
-      <li action="toggleMenuAction" key=" ">Close Menu</li>
+      <li action="runAlgorithmAction"    key="x">Run Algorithm</li>
+      <li action="chooseAlgorithmAction" key="a">Choose Algorithm</li>
+      <li action="randomizeAction"       key="m">Randomize Map</li>
+      <li action="clearAction"           key="c">Clear Map</li>
+      <li action="removeLastAction"      key="z">Remove Last Vertex</li>
+      <li action="toggleMenuAction"      key=" ">Close Menu</li>
     </ul>
   </aside>
   <canvas class="canvas"></canvas>
