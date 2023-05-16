@@ -91,9 +91,7 @@ export default new class Main {
       }
 
       elem.onclick = () => {
-        if (this.busy) return
         algorithmElements.forEach(elem => elem.classList.remove('active'))
-        this.edges = null
 
         if (algorithm === this.algorithm) {
           this.algorithm = null
