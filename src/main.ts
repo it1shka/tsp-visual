@@ -10,7 +10,6 @@ export default new class Main {
   constructor() {
     this.makeCanvasResizable()
     this.enableVertexAddition()
-    this.enableKeyBindings()
     this.bindMenu()
     this.startCanvasLoop()
   }
@@ -32,13 +31,6 @@ export default new class Main {
     }
   }
 
-  private enableKeyBindings() {
-    Keyboard.addEventListener('p', Actions.randomizeAction)
-    Keyboard.addEventListener('c', Actions.clearAction)
-    Keyboard.addEventListener('z', Actions.removeLastAction)
-    Keyboard.addEventListener(' ', Actions.toggleMenuAction)
-  }
-
   private bindMenu() {
     const menu = document.querySelector('.action-menu')
     if (menu === null) {
@@ -50,7 +42,12 @@ export default new class Main {
       if (action === null) return
       if (action in Actions) {
         type ActionType = keyof typeof Actions
-        button.onclick = Actions[action as unknown as ActionType]
+        const actionFunction = Actions[action as unknown as ActionType]
+        button.onclick = actionFunction
+        const keybinding = button.getAttribute('key')
+        if (keybinding !== null) {
+          Keyboard.addEventListener(keybinding, actionFunction)
+        }
       }
     })
     const toggleButton = document.querySelector('.action-menu-open-button')
