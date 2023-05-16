@@ -151,6 +151,11 @@ export default new class Main {
     this.busy = false
   }
 
+  clearEdges = () => {
+    if (this.busy) return
+    this.edges = null
+  }
+
   removeLast = () => {
     if (this.busy) return
     const last = this.vertices.pop()

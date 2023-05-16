@@ -53,3 +53,7 @@ export const chooseAlgorithmAction = (() => {
     panel.classList.toggle('closed')
   }
 })()
+
+export function clearEdgesAction() {
+  Main.clearEdges()
+}
