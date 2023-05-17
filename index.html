@@ -46,6 +46,22 @@
         This is repeated until we have a cycle containing all of the cities.
       </p>
     </li>
+
+    <li algorithm="nearestInsertionAlgorithm" class="algorithm-panel__option">
+      <h2>Nearest Insertion</h2>
+      <p>
+        Repeatedly finds the city not already in the tour that is closest to any city in the tour, 
+        and places it between whichever two cities would cause the resulting tour to be the shortest possible
+      </p>
+    </li>
+
+    <li algorithm="farthestInsertionAlgorithm" class="algorithm-panel__option">
+      <h2>Farthest Insertion</h2>
+      <p>
+        Repeatedly finds the city not already in the tour that is furthest from any city in the tour, 
+        and places it between whichever two cities would cause the resulting tour to be the shortest possible.
+      </p>
+    </li>
   </ul>
 
   <canvas class="canvas"></canvas>

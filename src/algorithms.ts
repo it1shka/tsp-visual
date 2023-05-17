@@ -1,4 +1,4 @@
-import { DisjointSet, Edge, Position, choice, dist, uniquePairs } from './utils'
+import { DisjointSet, Edge, Position, choice, dist, minBy, removeElement, uniquePairs, maxBy } from './utils'
 
 export function nearestNeighborAlgorithm(vertices: Position[], edges: Edge[]) {
   const start = choice(vertices)
@@ -8,11 +8,7 @@ export function nearestNeighborAlgorithm(vertices: Position[], edges: Edge[]) {
 
   while (visited.size < vertices.length) {
     const unvisited = vertices.filter(v => !visited.has(v))
-    const best = unvisited
-      .sort((a, b) => {
-        return dist(b, last) - dist(a, last)
-      })
-      .pop()!
+    const best = minBy(unvisited, elem => dist(elem, last))!
     visited.add(best)
     edges.push([last, best])
     last = best
@@ -36,5 +32,57 @@ export function shortestEdgeInsertionAlgorithm(vertices: Position[], edges: Edge
     edgeCount.set(b, countB + 1)
     disjointSet.union(a, b)
     edges.push(edge)
+  }
+}
+
+export function nearestInsertionAlgorithm(vertices: Position[], edges: Edge[]) {
+  const startEdge = minBy(uniquePairs(vertices), elem => dist(...elem))
+  if (startEdge === null) return
+
+  edges.push(startEdge)
+  const reached = [ ...startEdge ]
+
+  for (let i = 0; i < vertices.length - 2; i++) {
+    const unvisited = vertices.filter(v => !reached.includes(v))
+    const closestUnvisited = minBy(unvisited, point => {
+      const distancesToPoints = reached.map(e => dist(point, e))
+      return Math.min(...distancesToPoints)
+    })!
+    const closestEdge = minBy(edges, ([a, b]) => {
+      return dist(a, closestUnvisited) + dist(b, closestUnvisited) - dist(a, b)
+    })!
+    const [start, end] = closestEdge
+    if (edges.length > 1) {
+      removeElement(edges, closestEdge)
+    }
+    edges.push([start, closestUnvisited])
+    edges.push([closestUnvisited, end])
+    reached.push(closestUnvisited)
+  }
+}
+
+export function farthestInsertionAlgorithm(vertices: Position[], edges: Edge[]) {
+  const startEdge = maxBy(uniquePairs(vertices), elem => dist(...elem))
+  if (startEdge === null) return
+
+  edges.push(startEdge)
+  const reached = [ ...startEdge ]
+
+  for (let i = 0; i < vertices.length - 2; i++) {
+    const unvisited = vertices.filter(v => !reached.includes(v))
+    const farthestUnvisited = maxBy(unvisited, point => {
+      const distancesToPoints = reached.map(e => dist(point, e))
+      return Math.min(...distancesToPoints)
+    })!
+    const closestEdge = minBy(edges, ([a, b]) => {
+      return dist(a, farthestUnvisited) + dist(b, farthestUnvisited) - dist(a, b)
+    })!
+    const [start, end] = closestEdge
+    if (edges.length > 1) {
+      removeElement(edges, closestEdge)
+    }
+    edges.push([start, farthestUnvisited])
+    edges.push([farthestUnvisited, end])
+    reached.push(farthestUnvisited)
   }
 }

@@ -196,3 +196,29 @@ export function uniquePairs<T>(array: T[]) {
   }
   return output
 }
+
+export function minBy<T>(array: T[], selector: (elem: T) => number) {
+  let output: T | null = null
+  let value = Infinity
+  for (const each of array) {
+    const currentValue = selector(each)
+    if (currentValue < value) {
+      output = each
+      value = currentValue
+    }
+  }
+  return output
+}
+
+export function maxBy<T>(array: T[], selector: (elem: T) => number) {
+  let output: T | null = null
+  let value = -Infinity
+  for (const each of array) {
+    const currentValue = selector(each)
+    if (currentValue > value) {
+      output = each
+      value = currentValue
+    }
+  }
+  return output
+}
