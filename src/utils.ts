@@ -127,3 +127,54 @@ export function trackableArray<T>(source: T[]) {
 export function dist([x1, y1]: Position, [x2, y2]: Position) {
   return Math.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2)
 }
+
+class DisjointSet<T> {
+  private readonly parent = new Map<T, T>()
+  private readonly rank = new Map<T, number>()
+
+  constructor(...elements: T[]) {
+    elements.forEach(elem => this.makeSet(elem))
+  }
+
+  makeSet(element: T) {
+    if (this.parent.has(element)) return
+    this.parent.set(element, element)
+    this.rank.set(element, 0)
+  }
+
+  findParent(element: T) {
+    if (!this.parent.has(element)) {
+      return null
+    }
+    const currentParent = this.parent.get(element)!
+    if (currentParent !== element) {
+      this.parent.set(element, this.findParent(currentParent)!)
+    }
+    return this.parent.get(element)!
+  }
+
+  union(x: T, y: T) {
+    if (!this.parent.has(x) || !this.parent.has(y)) {
+      return false
+    }
+
+    const parentX = this.findParent(x)!
+    const parentY = this.findParent(y)!
+
+    if (parentX === parentY) return
+
+    const rankX = this.rank.get(parentX)!
+    const rankY = this.rank.get(parentY)!
+
+    if (rankX < rankY) {
+      this.parent.set(parentX, parentY)
+    } else if (rankY < rankX) {
+      this.parent.set(parentY, parentX)
+    } else {
+      this.parent.set(parentX, parentY)
+      this.rank.set(parentY, rankY + 1)
+    }
+
+    return true
+  }
+}
