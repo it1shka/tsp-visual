@@ -86,3 +86,26 @@ export function farthestInsertionAlgorithm(vertices: Position[], edges: Edge[]) 
     reached.push(farthestUnvisited)
   }
 }
+
+export function randomInsertionAlgorithm(vertices: Position[], edges: Edge[]) {
+  const startEdge = choice(uniquePairs(vertices))
+  if (startEdge === null) return
+
+  edges.push(startEdge)
+  const reached = [ ...startEdge ]
+
+  for (let i = 0; i < vertices.length - 2; i++) {
+    const unvisited = vertices.filter(v => !reached.includes(v))
+    const randomUnvisited = choice(unvisited)
+    const closestEdge = minBy(edges, ([a, b]) => {
+      return dist(a, randomUnvisited) + dist(b, randomUnvisited) - dist(a, b)
+    })!
+    const [start, end] = closestEdge
+    if (edges.length > 1) {
+      removeElement(edges, closestEdge)
+    }
+    edges.push([start, randomUnvisited])
+    edges.push([randomUnvisited, end])
+    reached.push(randomUnvisited)
+  }
+}
