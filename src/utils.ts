@@ -128,9 +128,10 @@ export function dist([x1, y1]: Position, [x2, y2]: Position) {
   return Math.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2)
 }
 
-class DisjointSet<T> {
+export class DisjointSet<T> {
   private readonly parent = new Map<T, T>()
   private readonly rank = new Map<T, number>()
+  private _size = 0
 
   constructor(...elements: T[]) {
     elements.forEach(elem => this.makeSet(elem))
@@ -140,6 +141,7 @@ class DisjointSet<T> {
     if (this.parent.has(element)) return
     this.parent.set(element, element)
     this.rank.set(element, 0)
+    this._size++
   }
 
   findParent(element: T) {
@@ -174,7 +176,23 @@ class DisjointSet<T> {
       this.parent.set(parentX, parentY)
       this.rank.set(parentY, rankY + 1)
     }
+    this._size--
 
     return true
   }
+
+  get size() {
+    return this._size
+  }
+}
+
+export function uniquePairs<T>(array: T[]) {
+  const output = new Array<readonly [T, T]>()
+  for (let i = 0; i < array.length; i++) {
+    for (let j = i + 1; j < array.length; j++) {
+      const pair = [array[i], array[j]] as const
+      output.push(pair)
+    }
+  }
+  return output
 }
