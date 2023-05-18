@@ -113,39 +113,29 @@ export function randomInsertionAlgorithm(vertices: Position[], edges: Edge[]) {
 export function twoOptAlgorithm(vertices: Position[], edges: Edge[]) {
   nearestNeighborAlgorithm(vertices, edges)
   while (true) {
-    const unoptimal = uniquePairs(edges).filter(([a, b]) => intersects(a, b))
-    if (unoptimal.length === 0) break
-    let improved = false
-    for (const optimization of unoptimal) {
-      const [a, b] = optimization
-      const [start1, end1] = a
-      const [start2, end2] = b
-      const currentCost = costOfPath(edges)
 
-      let alternative = [ ...edges ]
-      const newEdge1: Edge = [start1, start2]
-      const newEdge2: Edge = [end1, end2]
-      removeElement(alternative, a, b)
-      alternative.push(newEdge1, newEdge2)
-      if (costOfPath(alternative) < currentCost) {
-        removeElement(edges, a, b)
-        edges.push(newEdge1, newEdge2)
-        improved = true
-        break
-      }
+    const originalCost = costOfPath(edges)
+    let wasOptimized = false
 
-      alternative = [ ...edges ]
-      const newEdge3: Edge = [start1, end2]
-      const newEdge4: Edge = [start2, end1]
-      removeElement(alternative, a, b)
-      alternative.push(newEdge3, newEdge4)
-      if (costOfPath(alternative) < currentCost) {
-        removeElement(edges, a, b)
-        edges.push(newEdge3, newEdge4)
-        improved = true
-        break
+    const pairs = uniquePairs(edges).filter(pair => intersects(...pair))
+    outer: for (const pair of pairs) {
+      const [[start1, end1], [start2, end2]] = pair
+      const possibility1 = [[start1, end2], [start2, end1]] as const
+      const possibility2 = [[start1, start2], [end1, end2]] as const
+      for (const each of [possibility1, possibility2]) {
+        const alternative = [...edges]
+        removeElement(alternative, ...pair)
+        alternative.push(...each)
+        const newCost = costOfPath(alternative)
+        if (newCost < originalCost) {
+          removeElement(edges, ...pair)
+          edges.push(...each)
+          wasOptimized = true
+          break outer
+        }
       }
     }
-    if (!improved) break
+
+    if (!wasOptimized) break
   }
 }
