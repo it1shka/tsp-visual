@@ -18,7 +18,7 @@ export function randpos(): Position {
 }
 
 export function choice<T>(array: T[]) {
-  const index = randint(0, array.length - 1)
+  const index = randint(0, array.length)
   return array[index]
 }
 
@@ -46,7 +46,7 @@ export function sleep(time: number) {
 export const RandomNameGenerator = new class {
   private readonly prefixChance = 30
   private readonly prefixes = [ 'New', 'Old', 'North', 'South', 'West', 'East', 'Royal', 'Saint' ]
-  private readonly roots = [ 'Func', 'Def', 'Fork', 'Spoon', 'Bale', 'Wolf', 'Moth', 'Brew', 'Raven', 'Pork' ]
+  private readonly roots = [ 'Func', 'Def', 'Fork', 'Spoon', 'Bale', 'Wolf', 'Moth', 'Brew', 'Raven', 'Pork', 'Kasia', 'Mateusz' ]
   private readonly postfixes = [ 'ville', 'borough', 'chester', 'ford', 'gate', 'ham', 'minster', 'mouth', 'stead', 'ton', 'wick' ]
 
   getName() {
