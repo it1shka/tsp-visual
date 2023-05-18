@@ -25,6 +25,8 @@
       <li action="clearAction"           key="c">Clear Map</li>
       <li action="clearEdgesAction"      key="q">Clear Edges</li>
       <li action="removeLastAction"      key="z">Remove Last Vertex</li>
+      <li action="increaseShowSpeed"     key="=">Increase Show Speed</li>
+      <li action="decreaseShowSpeed"     key="-">Decrease Show Speed</li>
       <li action="toggleMenuAction"      key=" ">Close Menu</li>
     </ul>
   </aside>
@@ -68,6 +70,14 @@
       <p>
         Selects random city, inserts it between closest two cities 
         which are already visited.
+      </p>
+    </li>
+
+    <li algorithm="twoOptAlgorithm" class="algorithm-panel__option">
+      <h2>2-Opt Algorithm</h2>
+      <p>
+        Tries to improve a tour obtained with some other heuristic
+        by switching 2 edges at one time.
       </p>
     </li>
   </ul>

@@ -57,3 +57,11 @@ export const chooseAlgorithmAction = (() => {
 export function clearEdgesAction() {
   Main.clearEdges()
 }
+
+export function increaseShowSpeed() {
+  Main.increaseShowSpeed()
+}
+
+export function decreaseShowSpeed() {
+  Main.decreaseShowSpeed()
+}

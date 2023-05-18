@@ -1,4 +1,4 @@
-import { DisjointSet, Edge, Position, choice, dist, minBy, removeElement, uniquePairs, maxBy } from './utils'
+import { DisjointSet, Edge, Position, choice, dist, minBy, removeElement, uniquePairs, maxBy, intersects, costOfPath } from './utils'
 
 export function nearestNeighborAlgorithm(vertices: Position[], edges: Edge[]) {
   const start = choice(vertices)
@@ -107,5 +107,45 @@ export function randomInsertionAlgorithm(vertices: Position[], edges: Edge[]) {
     edges.push([start, randomUnvisited])
     edges.push([randomUnvisited, end])
     reached.push(randomUnvisited)
+  }
+}
+
+export function twoOptAlgorithm(vertices: Position[], edges: Edge[]) {
+  nearestNeighborAlgorithm(vertices, edges)
+  while (true) {
+    const unoptimal = uniquePairs(edges).filter(([a, b]) => intersects(a, b))
+    if (unoptimal.length === 0) break
+    let improved = false
+    for (const optimization of unoptimal) {
+      const [a, b] = optimization
+      const [start1, end1] = a
+      const [start2, end2] = b
+      const currentCost = costOfPath(edges)
+
+      let alternative = [ ...edges ]
+      const newEdge1: Edge = [start1, start2]
+      const newEdge2: Edge = [end1, end2]
+      removeElement(alternative, a, b)
+      alternative.push(newEdge1, newEdge2)
+      if (costOfPath(alternative) < currentCost) {
+        removeElement(edges, a, b)
+        edges.push(newEdge1, newEdge2)
+        improved = true
+        break
+      }
+
+      alternative = [ ...edges ]
+      const newEdge3: Edge = [start1, end2]
+      const newEdge4: Edge = [start2, end1]
+      removeElement(alternative, a, b)
+      alternative.push(newEdge3, newEdge4)
+      if (costOfPath(alternative) < currentCost) {
+        removeElement(edges, a, b)
+        edges.push(newEdge3, newEdge4)
+        improved = true
+        break
+      }
+    }
+    if (!improved) break
   }
 }

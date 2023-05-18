@@ -29,11 +29,12 @@ export function maybe<T>(probability: number, action: () => T) {
   return null
 }
 
-export function removeElement<T>(array: T[], element: T) {
-  const index = array.indexOf(element)
-  if (index === -1) return false
-  array.splice(index, 1)
-  return true
+export function removeElement<T>(array: T[], ...elements: T[]) {
+  for (const elem of elements) {
+    const index = array.indexOf(elem)
+    if (index === -1) continue
+    array.splice(index, 1)
+  }
 }
 
 export function sleep(time: number) {
@@ -163,7 +164,7 @@ export class DisjointSet<T> {
     const parentX = this.findParent(x)!
     const parentY = this.findParent(y)!
 
-    if (parentX === parentY) return
+    if (parentX === parentY) return false
 
     const rankX = this.rank.get(parentX)!
     const rankY = this.rank.get(parentY)!
@@ -221,4 +222,32 @@ export function maxBy<T>(array: T[], selector: (elem: T) => number) {
     }
   }
   return output
+}
+
+// the following piece of code was stolen
+// from stackoverflow
+// so i have no idea how it works
+export function intersects([[a,b],[c,d]]: Edge, [[p,q],[r,s]]: Edge) {
+  var det, gamma, lambda;
+  det = (c - a) * (s - q) - (r - p) * (d - b);
+  if (det === 0) {
+    return false;
+  } else {
+    lambda = ((s - q) * (r - a) + (p - r) * (s - b)) / det;
+    gamma = ((b - d) * (r - a) + (c - a) * (s - b)) / det;
+    return (0 < lambda && lambda < 1) && (0 < gamma && gamma < 1);
+  }
+}
+
+export function costOfPath(edges: Edge[]) {
+  const vertices = (edges as unknown as Array<Position[]>)
+    .reduce((acc, [a, b]) => [...acc, a, b], [])
+  const groups = new DisjointSet(...new Set(vertices))
+  let totalDistance = 0
+  for (const edge of edges) {
+    totalDistance += dist(...edge)
+    groups.union(...edge)
+  }
+  if (groups.size > 1) return Infinity
+  return totalDistance
 }

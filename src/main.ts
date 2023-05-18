@@ -163,7 +163,18 @@ export default new class Main {
     this.removeVertex(last)
   }
 
-  private readonly runDelay = 100
+  private runDelay = 100
+  private readonly minRunDelay = 20
+  private readonly maxRunDelay = 2000
+  private readonly delayStep = 25
+  increaseShowSpeed = () => {
+    this.runDelay = Math.max(this.minRunDelay, this.runDelay - this.delayStep)
+  }
+
+  decreaseShowSpeed = () => {
+    this.runDelay = Math.min(this.maxRunDelay, this.runDelay + this.delayStep)
+  }
+
   runAlgorithm = async () => {
     if (this.busy || !this.algorithm || this.vertices.length < 2) return
     this.busy = true

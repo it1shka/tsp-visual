@@ -11,8 +11,8 @@
   left: 0; right: 0;
   bottom: 0;
   display: flex;
+  overflow-x: scroll;
   flex-direction: row;
-  justify-content: center;
   & > * + * {
     margin-left: 0.5em;
   }
@@ -21,6 +21,8 @@
     margin: 1em;
     padding: 1em;
     max-width: 250px;
+    width: 100%;
+    flex-shrink: 0;
     color: white;
     border-radius: 15px;
     background: rgb(238,174,202);
