@@ -265,3 +265,16 @@ export function* permutations<T>(array: T[], n: number = array.length): Generato
     array.splice(i, 0, elem)
   }
 }
+
+export async function notification(message: string) {
+  const element = document.createElement('p')
+  element.classList.add('notification')
+  element.textContent = message
+  document.body.appendChild(element)
+  await sleep(0)
+  element.classList.add('show')
+  await sleep(3000)
+  element.classList.remove('show')
+  await sleep(1000)
+  element.remove()
+}

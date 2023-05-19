@@ -18,3 +18,25 @@
 body {
   font-family: sans-serif;
 }
+
+.notification {
+  position: fixed;
+  z-index: 30;
+  top: -100%;
+  left: 50%;
+
+  transition: top 0.5s ease-in-out;
+  &.show {
+    top: 10px;
+  }
+
+  text-align: center;
+  transform: translateX(-50%);
+  background-color: white;
+  font-size: 1.25em;
+
+  width: min(100vw, 360px);
+  padding: 0.5em 1em;
+  border-radius: 15px;
+  box-shadow: #8c8c8c 0px 0px 10px 0px;
+}

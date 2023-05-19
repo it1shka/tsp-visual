@@ -1,7 +1,7 @@
 import * as Actions from './actions'
 import * as Algorithms from './algorithms'
 import Canvas from './canvas'
-import { Position, Edge, Keyboard, randpos, removeElement, sleep, trackableArray } from './utils'
+import { Position, Edge, Keyboard, randpos, removeElement, sleep, trackableArray, notification, costOfPath } from './utils'
 import Vertex from './vertex'
 
 type Algorithm = (vertices: Position[], edges: Edge[]) => void
@@ -178,6 +178,7 @@ export default new class Main {
   runAlgorithm = async () => {
     if (this.busy || !this.algorithm || this.vertices.length < 2) return
     this.busy = true
+    notification('Running algorithm...')
     const vertices = this.vertices.map(vertex => vertex.position)
     const [edges, history] = trackableArray<Edge>([])
     this.algorithm(vertices, edges)
@@ -185,6 +186,8 @@ export default new class Main {
       this.edges = record
       await sleep(this.runDelay)
     }
+    const totalLength = Math.round(costOfPath(edges))
+    notification(`Total length: ${totalLength}`)
     this.busy = false
   }
 }()
