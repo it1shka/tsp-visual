@@ -179,3 +179,17 @@ export function kOptAlgorithm(vertices: Position[], edges: Edge[]) {
     if (!wasOptimized) break
   }
 }
+
+// this is a function that I will in christofides algorithm
+export function createMinimalSpanningTree(vertices: Position[], edges: Edge[]) {
+  // its using kruskal algorithm
+  const sortedEdges = uniquePairs(vertices).sort((a, b) => dist(...a) - dist(...b))
+  const disjointSet = new DisjointSet(...vertices)
+  for (const edge of sortedEdges) {
+    const [start, end] = edge
+    if (disjointSet.findParent(start) !== disjointSet.findParent(end)) {
+      edges.push(edge)
+      disjointSet.union(start, end)
+    }
+  }
+}
