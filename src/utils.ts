@@ -251,3 +251,17 @@ export function costOfPath(edges: Edge[]) {
   if (groups.size > 1) return Infinity
   return totalDistance
 }
+
+export function* permutations<T>(array: T[], n: number = array.length): Generator<T[]> {
+  if (n <= 0) {
+    yield []
+    return
+  }
+  for (let i = 0; i < array.length; i++) {
+    const [elem] = array.splice(i, 1)
+    for (const permutation of permutations(array, n - 1)) {
+      yield [elem, ...permutation]
+    }
+    array.splice(i, 0, elem)
+  }
+}

@@ -1,4 +1,4 @@
-import { DisjointSet, Edge, Position, choice, dist, minBy, removeElement, uniquePairs, maxBy, intersects, costOfPath } from './utils'
+import { DisjointSet, Edge, Position, choice, dist, minBy, removeElement, uniquePairs, maxBy, intersects, costOfPath, permutations } from './utils'
 
 export function nearestNeighborAlgorithm(vertices: Position[], edges: Edge[]) {
   const start = choice(vertices)
@@ -133,6 +133,46 @@ export function twoOptAlgorithm(vertices: Position[], edges: Edge[]) {
           wasOptimized = true
           break outer
         }
+      }
+    }
+
+    if (!wasOptimized) break
+  }
+}
+
+export function kOptAlgorithm(vertices: Position[], edges: Edge[]) {
+  nearestNeighborAlgorithm(vertices, edges)
+  let k = Number(window.prompt('Please, select k for k-opt algorithm'))
+  if (isNaN(k) || k < 2) k = 3 
+  let limit = Number(window.prompt('Please, select limit for k-opt algorithm'))
+  if (isNaN(limit) || limit < 10_000) limit = 10_000
+  let iterations = 0
+  while (iterations < limit) {
+    const originalCost = costOfPath(edges)
+    let wasOptimized = false
+    const pairs = uniquePairs(edges).filter(pair => intersects(...pair))
+    const intersectedEdges = [...new Set(pairs.flat())]
+    if (intersectedEdges.length === 0) break
+
+    outer: for (const permutation of permutations(intersectedEdges, Math.min(k, intersectedEdges.length))) {
+      const vertices = permutation.flat()
+      for (const flattenedEdges of permutations(vertices)) {
+        const alternative = [...edges]
+        removeElement(alternative, ...permutation)
+        for (let i = 0; i < flattenedEdges.length; i += 2) {
+          alternative.push([flattenedEdges[i], flattenedEdges[i + 1]])
+        }
+        const newCost = costOfPath(alternative)
+        if (newCost < originalCost) {
+          removeElement(edges, ...permutation)
+          for (let i = 0; i < flattenedEdges.length; i += 2) {
+            edges.push([flattenedEdges[i], flattenedEdges[i + 1]])
+          } 
+          wasOptimized = true
+          break outer
+        }
+        iterations++
+        if (iterations >= limit) break outer
       }
     }
 
