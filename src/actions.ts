@@ -65,3 +65,13 @@ export function increaseShowSpeed() {
 export function decreaseShowSpeed() {
   Main.decreaseShowSpeed()
 }
+
+export const toggleHistoryAction = (() => {
+  const history = document.querySelector('.history')
+  if (history === null) {
+    throw new Error('Failed to get history')
+  }
+  return () => {
+    history.classList.toggle('closed')
+  }
+})()

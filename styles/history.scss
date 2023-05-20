@@ -1,0 +1,35 @@
+.history {
+  transition: 0.5s all ease-in-out;
+  &.closed {
+    top: -100%;
+  }
+  
+  position: fixed;
+  z-index: 40;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: min(460px, 100vw);
+  height: min(600px, 100vh);
+  border: 2px solid grey;
+  background-color: #00000020;
+  border-radius: 15px;
+  box-shadow: #8c8c8c 0px 0px 10px 0px;
+
+  .history__list {
+    margin: 1em;
+    li {
+      user-select: none;
+      text-align: center;
+      padding: 0.5em;
+      color: white;
+      background-color: #838383;
+      margin-bottom: 0.45em;
+
+      transition: 0.1s all ease;
+      &:hover {
+        margin-left: 1em;
+        border-radius: 15px 0px 0px 15px;
+      }
+    }
+  }
+}

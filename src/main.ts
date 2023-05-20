@@ -1,7 +1,7 @@
 import * as Actions from './actions'
 import * as Algorithms from './algorithms'
 import Canvas from './canvas'
-import { Position, Edge, Keyboard, randpos, removeElement, sleep, trackableArray, notification, costOfPath } from './utils'
+import { Position, Edge, Keyboard, randpos, removeElement, sleep, trackableArray, notification, costOfPath, pushToHistory } from './utils'
 import Vertex from './vertex'
 
 type Algorithm = (vertices: Position[], edges: Edge[]) => void
@@ -188,6 +188,7 @@ export default new class Main {
     }
     const totalLength = Math.round(costOfPath(edges))
     notification(`Total length: ${totalLength}`)
+    pushToHistory(`"${this.algorithm.name}": ${totalLength}`)
     this.busy = false
   }
 }()

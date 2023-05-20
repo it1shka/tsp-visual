@@ -278,3 +278,14 @@ export async function notification(message: string) {
   await sleep(1000)
   element.remove()
 }
+
+export const pushToHistory = (() => {
+  const history = document.querySelector('.history')!
+  const list = history.querySelector('ul')!
+  return (message: string) => {
+    const element = document.createElement('li')
+    element.textContent = message
+    list.appendChild(element)
+    history.scrollTop = history.scrollHeight
+  }
+})()
